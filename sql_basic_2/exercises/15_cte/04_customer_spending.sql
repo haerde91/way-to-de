@@ -8,20 +8,21 @@
 -- customer_id,
 -- customer_name,
 -- total_spent
-with total_spent as
+with customer_spending as
 (
-    select o.customer_id, sum(o.amount) as amount_spent
+    select o.customer_id, sum(o.amount) as total_spent
     from orders o
     group by o.customer_id
 ),
 avg_spent as
 (
-    select avg(ts.amount_spent) avg_total_spent
-    from total_spent ts
+    select avg(cs.total_spent) avg_total_spent
+    from customer_spending cs
 )
-select c.customer_id, c.customer_name, ts.amount_spent
+select c.customer_id, c.customer_name, cs.total_spent
 from customers c
-join total_spent ts
-on c.customer_id = ts.customer_id
+join customer_spending cs
+on c.customer_id = cs.customer_id
 cross join avg_spent av
-where ts.amount_spent > av.avg_total_spent
+where cs.total_spent > av.avg_total_spent
+;
