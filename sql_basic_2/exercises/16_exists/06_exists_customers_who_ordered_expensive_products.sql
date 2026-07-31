@@ -1,0 +1,8 @@
+-- Task:
+-- The company wants to identify customers
+-- who have ordered at least one product
+-- with a price greater than 1000.
+-- Use EXISTS.
+-- Return:
+-- customer_id,
+-- customer_name
