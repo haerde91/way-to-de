@@ -1,7 +1,7 @@
 -- Task:
 -- The company wants to identify customers
--- who have ordered at least one product
--- with a price greater than 1000.
+-- who have placed at least one order
+-- containing more than 3 different products.
 -- Use EXISTS.
 -- Return:
 -- customer_id,
@@ -15,9 +15,7 @@ where exists
     from orders o
     join order_items oi
     on o.order_id = oi.order_id
-    join products p
-    on oi.product_id = p.product_id
-    where p.price > 1000
-    and c.customer_id = o.customer_id
-)
-order by c.customer_id;
+    where c.customer_id = o.customer_id
+    group by o.order_id
+    having count(distinct oi.product_id) > 3
+);
