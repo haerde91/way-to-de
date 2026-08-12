@@ -21,19 +21,20 @@ with orders_values as
 ),
 customers_avg_orders as
 (
-    select distinct o.customer_id,
+    select o.order_id,
+    o.customer_id,
+    ov.order_value,
     avg(ov.order_value) over (partition by o.customer_id) as customer_average_order_value
     from orders o
     join orders_values ov
     on o.order_id = ov.order_id
 )
-select ov.order_id,
-o.customer_id,
-ov.order_value,
+select cao.order_id,
+cao.customer_id,
+cao.order_value,
 cao.customer_average_order_value,
-(ov.order_value - cao.customer_average_order_value) as difference_from_customer_average
-from orders_values ov
-join orders o
-on ov.order_id = o.order_id
-join customers_avg_orders cao
-on o.customer_id = cao.customer_id
+(cao.order_value - cao.customer_average_order_value) as difference_from_customer_average
+from  customers_avg_orders cao
+;
+
+
